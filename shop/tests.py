@@ -24,6 +24,20 @@ class ShopAPITestCase(APITestCase):
 class TestCategory(ShopAPITestCase):
     url = reverse_lazy('category-list')
     
+    def test_detail(self):
+        url_detail = reverse('category-detail', kwargs={'pk': self.category.pk})
+        response = self.client.get(url_detail)
+        self.assertEqual(response.status_code, 200)
+        
+        excepted = {
+            'id': self.category.pk,
+            'name': self.category.name,
+            'date_created': self.format_datetime(self.category.date_created),
+            'date_updated': self.format_datetime(self.category.date_updated),
+            'products': self.get_product_detail_data(self.category.products.filter(active=True)),
+        }
+        self.assertEqual(excepted, response.json())
+    
     def test_list(self):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
@@ -48,6 +62,20 @@ class TestCategory(ShopAPITestCase):
 class TestProduct(ShopAPITestCase):
     
     url = reverse_lazy('product-list')
+    
+    def test_detail(self):
+        url_detail = reverse('product-detail', kwargs={'pk': self.product.pk})
+        response = self.client.get(url_detail)
+        self.assertEqual(response.status_code, 200)
+        
+        excepted = {
+            'id': self.product.pk,
+            'name': self.product.name,
+            'date_created': self.format_datetime(self.product.date_created),
+            'date_updated': self.format_datetime(self.product.date_updated),
+            'products': self.get_product_detail_data(self.product.products.filter(active=True)),
+        }
+        self.assertEqual(excepted, response.json())
 
     def get_product_detail_data(self, products):
         return [
