@@ -25,9 +25,5 @@ router.register('admin/category', AdminCategoryViewset, basename='admin-category
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
-<<<<<<< HEAD
-    path('api/', include(router.urls)),
-=======
     path('api/', include(router.urls))
->>>>>>> upstream/P2C4_exercice
 ]
