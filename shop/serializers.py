@@ -1,4 +1,3 @@
-from pyexpat import model
 from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
 from shop.models import Article, Category, Product
@@ -24,6 +23,24 @@ class CategoryDetailSerializer(serializers.ModelSerializer):
         queryset = instance.products.filter(active=True)
         serializer = ProductListSerializer(queryset, many=True)
         return serializer.data
+    
+
+class CategoryListSerializer(serializers.ModelSerializer):
+     
+    class Meta:
+        model = Category
+        fields = ['id', 'date_created', 'date_updated', 'name', 'description']
+ 
+    def validate_name(self, value):
+        # Nous vérifions que la catégorie existe
+        if Category.objects.filter(name=value).exists():
+        # En cas d'erreur, DRF nous met à disposition l'exception ValidationError
+            raise serializers.ValidationError('Category already exists')
+        return value
+    
+    def validate(self, data):
+        if data['name'] not in data['description']:
+            raise serializers.ValidationError('Name must be in description')
 
 
 class ProductListSerializer(ModelSerializer):

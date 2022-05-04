@@ -9,6 +9,8 @@ router.register('category', CategoryViewset, basename='category')
 router.register('product', ProductViewset, basename='product')
 router.register('article', ArticleViewset, basename='article')
 
+router.register('admin/category', AdminCategoryViewset, basename='admin-category')
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
